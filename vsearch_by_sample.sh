@@ -31,7 +31,7 @@ email=lpfreder@illinois.edu
 rootdir=/home/groups/hpcbio_shared/brianallan_group
 inputdir=$rootdir/results/2016-08-09-prepare-reads
 tmpdir=$rootdir/src/tmp_logs
-outputdir=$rootdir/results/2016-08-18_vsearch_summary_by_sample_with_taxid
+outputdir=$rootdir/results/2016-08-29_vsearch_summary_by_sample_with_taxid
 scriptdir=$rootdir/src
 
 echo -e "\n############  default values for parameters\n" 
