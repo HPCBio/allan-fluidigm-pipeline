@@ -1,3 +1,7 @@
 # Description
 
-Fluidigm pipeline 
+Fluidigm pipeline
+
+## Nextflow
+
+In the `nextflow` folder
