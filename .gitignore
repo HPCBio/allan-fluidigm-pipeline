@@ -5,3 +5,5 @@ REDO_*
 *_logs*
 *.log
 config
+*.gz
+*.tgz
