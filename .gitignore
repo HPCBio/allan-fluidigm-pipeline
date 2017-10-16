@@ -1,3 +1,7 @@
 *.txt
 tmp_logs
+log_*
+REDO_*
+*_logs*
 *.log
+config
