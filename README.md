@@ -1,6 +1,7 @@
 # Description
 
-General description goes here...
+In a typical metagenomics analysis pipeline with fluidigm data, reads are compared to  sequences in a taxonomic database such as Silva in order to generate a taxonomic abundance table. In our case we need to prepare and use a custom database of tick pathogens in order to produce a presence/absence table with only the species included in that database. 
+
 ## old_scripts
 In the `old_scripts` folder...
 
