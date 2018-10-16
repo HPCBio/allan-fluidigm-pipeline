@@ -34,13 +34,15 @@ This program expects the following tools/languages to be installed as modules an
 
 # More preparation steps
 
-- Prepare the configuration file.
+- <b>Prepare the configuration file</b>.
 The fluidigm pipeline can process different kinds of amplicons such as V1, V3, V4. However, each amplicon has to be run separately because the analysis steps vary slightly. 
 Prepare a configuration file for each amplicon. This configuration file is a list of parameter-value pairs that is used to specify read preparation, search and filtering options.  Some examples are provided in `nextflow_scripts/config`.
 
-- Prepare the raw reads.
+- <b>Prepare the raw reads</b>.
 This pipeline expects paired-ended short reads that have been already demultiplexed.
-Put the raw reads in one folder and give the folder the exact name of the amplicon. 
+The pipeline also expects that the filenames of the raw reads have this pattern: <i> amplicon </i> -  <i> sample </i> .R[1,2].fq
+Put the demultiplexed raw reads that belong to the same amplicon in the same folder. 
+It is important that you <i> do not mix </i> raw reads from different amplicons in the same folder. 
 You can use any of the datasets provided in the  `test_data` folder.
 
 # Running the program
