@@ -4,9 +4,36 @@ General description goes here...
 ## old_scripts
 In the `old_scripts` folder...
 
-## Nextflow_scripts
+## nextflow_scripts
 In the `nextflow_scripts` folder...
 
+## test_data
+In the `test_data` folder...
+
+# Dependencies
+
+This program expects the following tools/languages to be installed as modules and be available in your path:
+
+- Nextflow        tested with version 0.27.3 ( download page https://github.com/nextflow-io/nextflow/releases?after=v0.29.0-RC1 )
+- Trimmomatic     tested with version 0.36 ( download page https://github.com/timflutre/trimmomatic)
+- PEAR            tested with version   0.9.8 (download page https://pear.php.net/package/PEAR/download)
+- FASTX-Toolkit   tested with version  0.0.14 (download page http://hannonlab.cshl.edu/fastx_toolkit/download.html)
+- vsearch         tested with version 2.4.3 (download page https://github.com/torognes/vsearch/releases)
+- blast           tested with version BLAST+ 2.6.0  (download page ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/)
+
+# Installation instructions
+
+- Install all dependencies first. You may need to have root access to install some of these tools/languages on a cluster.
+- Do not forget to launch the 'hello world' nextflow pipeline (as per https://www.nextflow.io/) to make sure it works fine.
+- Make a copy of the  `nextflow_scripts` folder 
+
+# Database preparation
+
+# Running the program
+
+# Outputs
+
+# Downstream analysis
 
 # Citation
 
@@ -17,17 +44,6 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 You should have received a copy of the GNU General Public License along with this program. If not, see http://www.gnu.org/licenses/
 
-# Dependencies
 
-# Installation instructions
-
-# 
-# Database preparation
-
-# Running the program
-
-# Outputs
-
-# Downstream analysis
 
 
