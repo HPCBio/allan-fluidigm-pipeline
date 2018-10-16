@@ -2,6 +2,9 @@
 
 In a typical metagenomics analysis pipeline with fluidigm data, reads are compared to  sequences in a taxonomic database such as Silva in order to generate a taxonomic abundance table. In our case we need to prepare and use a custom database of tick pathogens in order to produce a presence/absence table with only the species included in that database. 
 
+![Alt text](docs/workflow.jpg?raw=true "Workflow")
+
+
 ## old_scripts
 In the `old_scripts` folder...
 
@@ -47,8 +50,6 @@ It is important that you <i> do not mix </i> raw reads from different amplicons 
 You can use any of the datasets provided in the  `test_data` folder.
 
 # Running the program
-Include a flowchart of the pipeline here
-
 To run the fluidigm pipeline type this command: <i> nextflow run -c config fluidigm-template-ballan-v0.3.nf  </i>
 
 # Outputs
