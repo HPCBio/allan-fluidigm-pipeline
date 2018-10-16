@@ -20,6 +20,7 @@ This program expects the following tools/languages to be installed as modules an
 - FASTX-Toolkit   tested with version  0.0.14 (download page http://hannonlab.cshl.edu/fastx_toolkit/download.html)
 - vsearch         tested with version 2.4.3 (download page https://github.com/torognes/vsearch/releases)
 - blast           tested with version BLAST+ 2.6.0  (download page ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/)
+- Perl            tested with version 5.24.1  ( download page https://www.perl.org/ )
 
 # Installation instructions
 
@@ -28,8 +29,22 @@ This program expects the following tools/languages to be installed as modules an
 - Make a copy of the  `nextflow_scripts` folder 
 
 # Database preparation
+- You can use the database we provide in the  `test_data` folder.
+- To prepare your own database, put your seed sequences in a fasta file and run this program:
+
+# More preparation steps
+
+Prepare the configuration file.
+The fluidigm pipeline can process different kinds of amplicons such as V1, V3, V4. However, each amplicon has to be run separately because the analysis steps vary slightly. 
+Prepare a configuration file for each amplicon. This configuration file is a list of parameter-value pairs that is used to specify read preparation, search and filtering options.  Some examples are provided in `nextflow_scripts/config`.
+
+Prepare the rew reads.
+- This pipeline expects paired-ended short reads that have been already demultiplexed.
+- Put the raw reads in one folder and give the folder the exact name of the amplicon. 
+- You can use any of the datasets provided in the  `test_data` folder.
 
 # Running the program
+To run the fluidigm pipeline type this command: <i> nextflow run -c config fluidigm-template-ballan-v0.3.nf  </i>
 
 # Outputs
 
