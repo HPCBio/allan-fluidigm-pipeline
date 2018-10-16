@@ -71,7 +71,8 @@ Where:
 - 5_PERCENTILE is the 5th percentile 
 
 # Downstream analysis
-The output file produced by the pipeline is a table of taxonomic abundance. However, it is not formatted as a regular OTU table that can be further processed by tools such as QIIME or dada2.
+This pipeline produces a presence/absence table with only the species present in the custome database. 
+It is not an OTU table (table of taxonomic abundace) that could be further analyzed with tools such as QIIME.
 
 # Citation
 
