@@ -36,7 +36,7 @@ This program expects the following tools/languages to be installed as modules an
 
 - <b>Prepare the configuration file</b>.
 The fluidigm pipeline can process different kinds of amplicons such as V1, V3, V4. However, each amplicon has to be run separately because the analysis steps vary slightly. 
-Prepare a configuration file for each amplicon. This configuration file is a list of parameter-value pairs that is used to specify read preparation, search and filtering options.  Some examples are provided in `nextflow_scripts/config`.
+Prepare a configuration file for each amplicon. This configuration file is a list of parameter-value pairs that is used to specify read preparation, search and filtering options. For instance, if the reads overlap, then stitching the reads is a step that is performed by this pipeline, otherwise only R1 is used for the analysis. Some examples are provided in `nextflow_scripts/config`.
 
 - <b>Prepare the raw reads</b>.
 This pipeline expects paired-ended short reads that have been already demultiplexed.
@@ -46,11 +46,32 @@ It is important that you <i> do not mix </i> raw reads from different amplicons 
 You can use any of the datasets provided in the  `test_data` folder.
 
 # Running the program
+Include a flowchart of the pipeline here
+
 To run the fluidigm pipeline type this command: <i> nextflow run -c config fluidigm-template-ballan-v0.3.nf  </i>
 
 # Outputs
+Nextflow generates two folders to keep track of execution progress. You can delete them once the execution ends successfully. They are called <i>.nextflow/ </i> and <i>work/ </i>
+
+The actual results are placed in these folders: 
+- <b>readprep/</b>  contains the results of QC, filter and trim of the raw reads. If the reads were stitched together, then PEAR results will be placed here too.
+- <b>vsearchResults</b> contains the results of searches performed with VSEARCH, all subsequent filtering steps applied to each demultiplexed file as well as the final results of this step which is the file with this pattern 
+
+<i> amplicon </i> * <i>__vsearchSummaryReport.txt</i>
+
+This file is a tabulated table with these columns: Sample	Amplicon	EXTENDED_SEQID	TOTAL_READS_IN_DEMULTIPLEXED_SAMPLE	TOTAL_HITS	MIN_percIdent	MAX_percIdent	AVG_percIdent	MIN_alnLen	MAX_alnLen	AVG_alnLen	MIN_Coverage	MAX_Coverage	AVG_Coverage	5_PERCENTILE
+
+Where:
+- EXTENDED_SEQID is the sequence identifier of the hit that concatenates together the accession number and the species name
+- TOTAL_READS_IN_DEMULTIPLEXED_SAMPLE is the total read count of the demultiplexed sample
+- TOTAL_HITS is the read coverage for this hit
+- MIN_percIdent	MAX_percIdent	AVG_percIdent are minimum, maximum and average percent identity of the reads for this hit
+- MIN_alnLen	MAX_alnLen	AVG_alnLen are minimum, maximum and average alignment length of the reads for this hit
+- MIN_Coverage	MAX_Coverage	AVG_Coverage are minimum, maximum and average coverage of the reads for this hit
+- 5_PERCENTILE is the 5th percentile 
 
 # Downstream analysis
+The output file produced by the pipeline is a table of taxonomic abundance. However, it is not formatted as a regular OTU table that can be further processed by tools such as QIIME or dada2.
 
 # Citation
 
