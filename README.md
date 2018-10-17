@@ -6,13 +6,13 @@ In a typical analysis pipeline with fluidigm data, reads are compared to  sequen
 
 
 ## old_scripts
-In the `old_scripts` folder...
+In the `old_scripts` folder we have legacy code. Ignore these files
 
 ## nextflow_scripts
-In the `nextflow_scripts` folder...
+In the `nextflow_scripts` folder we have the current version of the pipeline which is written in Nextflow.
 
 ## test_data
-In the `test_data` folder...
+In the `test_data` folder we have database files and raw read files that you can use to test the pipeline.
 
 # Dependencies
 
@@ -33,8 +33,17 @@ This program expects the following tools/languages to be installed as modules an
 - Make a copy of the  `nextflow_scripts` folder 
 
 # Database preparation
-- You can use the database we provide in the  `test_data` folder.
-- To prepare your own database, put your seed sequences in a fasta file and run this program:
+You can use the database we provide in the  `test_data` folder.
+
+To prepare your own database:
+- Make a copy of the `nextflow_scripts/dbutils` folder
+- Create a fasta file with your seed sequences only
+- Download NCBI-NT from ftp://ftp.ncbi.nlm.nih.gov/blast/db/  This site has several databases that are already blast-formatted. Download only the files for the NT database. The README file on that page has full instructions.
+- Run this program to prepare a database with your seed sequences and its closest homologs: 
+
+<i> nextflow run nextflow_scripts/dbutils/prepare-database-ballan-v1.nf </i>
+
+- This program will generate two files and both of them will be needed.
 
 # More preparation steps
 
@@ -50,7 +59,9 @@ It is important that you <i> do not mix </i> raw reads from different amplicons 
 You can use any of the datasets provided in the  `test_data` folder.
 
 # Running the program
-To run the fluidigm pipeline type this command: <i> nextflow run -c config fluidigm-template-ballan-v0.3.nf  </i>
+To run the fluidigm pipeline type this command: 
+
+<i> nextflow run -c config fluidigm-template-ballan-v0.3.nf  </i>
 
 # Outputs
 Nextflow generates two folders to keep track of execution progress. You can delete them once the execution ends successfully. They are called <i>.nextflow/ </i> and <i>work/ </i>
