@@ -10,7 +10,7 @@ This is the generic template to process B-Allan Fluidigm data. It performs read 
 import java.text.SimpleDateFormat
 
 // version
-version = 0.2
+version = 0.3
 
 
 // Credit to Phil Ewels for this segment to generate the help message at the command-line
@@ -18,15 +18,15 @@ version = 0.2
 def helpMessage() {
     log.info"""
     =========================================
-     B_ALLAN FLUIDIGM PIPELINE v${version} 
+     B_ALLAN FLUIDIGM PIPELINE v${version}
     =========================================
 
     Usage:
     The typical command for running the pipeline is as follows:
     nextflow run -c <nxf-amplicon.conf>  <fluidigm-template-amplicon.nf>
-    
+
     where nxf-amplicon.conf is the configuration file for a particular amplicon
-    
+
     To override existing values from the command line, please use these parameters:
 
 	--Amplicon                    The name of the Amplicon as it appears in the sequencing report and in the filenames of the reads
@@ -46,27 +46,27 @@ def helpMessage() {
 	--R1minlen                    Minimum sequence length after qctrim of R1. Valid value: a positive integer
 	--R1maxlen                    Maximum sequence length of R1 after qctrim. Valid value: a positive integer
 	--R1adaptorLen                Length of adaptor for R1. This value comes from the sequencing report. Valid value: a positive integer
-	--R2minlen                    Minimum sequence length of R2 after qctrim. Valid value: a positive integer 
-	--R2maxlen                    Maximum sequence length of R2 after qctrim. Valid value: a positive integer   
+	--R2minlen                    Minimum sequence length of R2 after qctrim. Valid value: a positive integer
+	--R2maxlen                    Maximum sequence length of R2 after qctrim. Valid value: a positive integer
 	--R2adaptorLen                Length of adaptor for R2. This value comes from the sequencing report. Valid value: a positive integer
 	--maxSeqLen                   Maximum sequence length of STITCHED read. Valid value: a positive integer
 	--minSeqLen                   Minimum sequence length of STITCHED read. Valid value: a positive integer
-	--minqual                     Minimum base quality. Valid value: a positive integer <= 40                        
+	--minqual                     Minimum base quality. Valid value: a positive integer <= 40
 	--minoverlap                  Minimum length of overlap. Valid value: a positive integer. Default=20
 
    Clustering options:
-	--percidentity  = '0.90'      percent identity cutoff       
-	--maxhitsV      = '50'        maximum number of hits to report per query; applicable to all V amplicons              
-	--maxhitsNOV    = '10'        maximum number of hits to report per query; applicable to all NON-V amplicons 
-	--mincov        = '50'        minimum coverage cutoff to use when post-processing hits   
+	--percidentity  = '0.90'      percent identity cutoff
+	--maxhitsV      = '50'        maximum number of hits to report per query; applicable to all V amplicons
+	--maxhitsNOV    = '10'        maximum number of hits to report per query; applicable to all NON-V amplicons
+	--mincov        = '50'        minimum coverage cutoff to use when post-processing hits
 	--percentile    = '5'         percentile cutoff
-      
+
     Other optional parameters:
         -with-dag                     Graphic of the execution report in PDF format. Valid value:a file name
         -with-timeline                Timeline of all processes executed durin the execution. Report in HTML format. Valid value:a file name
-	-qs                           Maximum number of concurrent processes.  Valid value: a positive integer. Default value 1. Recommended value 20.  
+	-qs                           Maximum number of concurrent processes.  Valid value: a positive integer. Default value 1. Recommended value 20.
         --help                        To generate this message
-     
+
     """.stripIndent()
 }
 
@@ -80,7 +80,7 @@ if (params.help){
 
 // Configurable variables
 
-// To convert this script into a template, simply set the value to false for all variables that start with params. 
+// To convert this script into a template, simply set the value to false for all variables that start with params.
 
 /* Main variables*/
 params.Amplicon      = false
@@ -123,15 +123,15 @@ params.out           = "${vsearchPath}/${params.Amplicon}_seqLot${params.SeqLot}
 
 /* Path for internal DB, programs and scripts*/
 params.adaptors             = "${params.srcdir}/adaptors.fa"
-params.ScriptFilterVsearch  = "${params.srcdir}/filter_vsearch_output.pl" 
-params.ScriptSummaryVsearch = "${params.srcdir}/vsearch_calcSummary.pl" 
-params.DBfasta              = "${params.dbdir}/DB_version2_combined_and_filtered_2017.fasta"
-params.DBtsv                = "${params.dbdir}/DB_version2_combined_and_filtered_2017.tsv"
+params.ScriptFilterVsearch  = "${params.srcdir}/filter_vsearch_output.pl"
+params.ScriptSummaryVsearch = "${params.srcdir}/vsearch_calcSummary.pl"
+params.DBfasta              = "${params.dbdir}/newAmpliconsDB_with_taxid_v4.fa"
+params.DBtsv                = "${params.dbdir}/newAmpliconsDB_with_taxid_v4.csv"
 
 
 
 /*Biocluster2 options. List memory in gigabytes like in suggestions below*/
-myQueue       = 'budget'
+myQueue       = 'lowmem'
 trimMemory    = '5'
 trimCPU       = '4'           // this line becomes the slurm directive for number of CPUs
 trimThreads   = '4'           // this line becomes the param number-of-threads used by the triming tool
@@ -141,7 +141,7 @@ fastxMemory   = '2'
 fastxCPU      = '1'
 vsearchMemory = '5'
 vsearchCPU    = '4'           // this line becomes the slurm directive for number of CPUs
-vsearchThread = '4'           // this line becomes the param number-of-threads used by the vsearch tool 
+vsearchThread = '4'           // this line becomes the param number-of-threads used by the vsearch tool
 pearMemory    = '5'
 pearCPU       = '4'
 
@@ -149,11 +149,11 @@ pearCPU       = '4'
 pearMod       = 'PEAR/0.9.8-IGB-gcc-4.9.4'
 fastxMod      = 'FASTX-Toolkit/0.0.14-IGB-gcc-4.9.4'
 vsearchMod    = 'VSEARCH/2.4.3-IGB-gcc-4.9.4'
-trimVersion   = '0.36'
-trimMod       = "Trimmomatic/0.36-Java-1.8.0_121"
+trimVersion   = '0.38'
+trimMod       = "Trimmomatic/0.38-Java-1.8.0_152"
 trimHome      = '\$EBROOTTRIMMOMATIC'
 trimJar       = "${trimHome}/trimmomatic-${trimVersion}.jar"
-trimJava      = 'Java/1.8.0_121'
+trimJava      = 'Java/1.8.0_152'
 nxfJava       = 'Java/1.8.0_152'
 params.Java   = " -Xmx2g -XX:ParallelGCThreads=${trimThreads} "  // this line to force java to behave correctly with resources
 
@@ -172,16 +172,16 @@ if(  params.skipStitch != 'YES'  &&  params.skipStitch != 'NO' ){
     exit 1, "Invalid value for ${params.skipStitch}.  Valid options: 'YES', 'NO'\n"
 }
 
-if( params.skipStitch == 'YES' ){ 
+if( params.skipStitch == 'YES' ){
 	params.singleEnd     = '1'
 	if( !params.R1maxlen || !params.R1adaptorLen || !params.minqual ){ exit 1, "Missing values for R1maxlen R1adaptorLen minqual"	}
 	params.readprep      = " trimmomatic: ${trimOptions} "
 }
 
-if( params.skipStitch == 'NO' ){ 
-	params.singleEnd     = '2' 
-	if( !params.R1adaptorLen || !params.R2adaptorLen || !params.minoverlap ){ exit 1, "Missing values for R1adaptorLen R2adaptorLen minoverlap" }	
-	if( !params.minSeqLen || !params.maxSeqLen || !params.minqual ){ exit 1, "Missing values for minSeqLen maxSeqLen minqual" }	
+if( params.skipStitch == 'NO' ){
+	params.singleEnd     = '2'
+	if( !params.R1adaptorLen || !params.R2adaptorLen || !params.minoverlap ){ exit 1, "Missing values for R1adaptorLen R2adaptorLen minoverlap" }
+	if( !params.minSeqLen || !params.maxSeqLen || !params.minqual ){ exit 1, "Missing values for minSeqLen maxSeqLen minqual" }
 	params.readprep      = " trimmomatic: ${R1trimOptions} + ${R1trimOptions} PEAR: ${stitchOptions} "
 }
 
@@ -200,7 +200,7 @@ if (params.ticket == 0) exit 1, "Must set Redmine ticket for pipeline summary to
 
 // Credit to Phil Ewels for this little bit of self-documentation
 run_info = """
-          
+
 ====================================
  B_Allan FLUIDIGM PIPELINE: Fluidigm read preparation and clustering for amplicon: ${params.Amplicon} batch: ${params.SeqLot}
 ====================================
@@ -235,7 +235,7 @@ Current user                : $USER
 Current path                : $PWD
 Script dir                  : ${params.srcdir}
 Database dir                : ${params.dbdir}
-Output dir                  : ${params.resultsdir} 
+Output dir                  : ${params.resultsdir}
 Project dir                 : ${params.projectdir}
 Ticket                      : ${params.ticket}
 
@@ -253,10 +253,10 @@ log.info run_info
 * --Stitching done with PEAR. It may be skipped for certains targets.
 * --Format conversion with fastx-toolkit
 *
-* Warnings: 
+* Warnings:
 * there are some tweaks that were added to make Nextflow/0.26 happy
 * --The java cmd now includes params for managing heap size, -Xmx, and number of threads -XX:ParallelGCThreads
-* --We perform swapping of Java modules to resolve conflicts with different versions used by nextflow and other java-based apps 
+* --We perform swapping of Java modules to resolve conflicts with different versions used by nextflow and other java-based apps
 */
 
 process readPreparation {
@@ -276,33 +276,9 @@ process readPreparation {
     file "*{trimmed.fastq,SearchReady.fasta}"
 
     script:
-    
+
     if ( params.singleEnd == '1' ) {
 	    """
-	    #!/bin/bash
-
-	    fileName=\$(basename "${read1}")
-	    baseName="\${fileName%_*_R1.fastq}"
-
-	    truncate -s 0 \${baseName}_SearchReady.fasta      
-
-	    module unload ${nxfJava}
-	    module load ${trimJava}
-	    
-	    java ${params.Java} -jar ${trimJar} SE -threads ${trimThreads} -phred33 \
-	    ${read1} \${baseName}.trimmed.fastq ${trimOptions} 2> \${baseName}.trimrun.log 
-
-	    if [ -s \${baseName}.trimmed.fastq ]
-	    then
-	       fastq_to_fasta -v -i \${baseName}.trimmed.fastq -o \${baseName}_SearchReady.fasta
-	    fi
-
-	    module unload ${trimJava}
-	    module load ${nxfJava}
-	    
-	    """	    
-    } else { 
-    	    """ 
 	    #!/bin/bash
 
 	    fileName=\$(basename "${read1}")
@@ -313,8 +289,32 @@ process readPreparation {
 	    module unload ${nxfJava}
 	    module load ${trimJava}
 
-	    java  ${params.Java} -jar ${trimJar} SE -threads ${trimThreads} -phred33 $read1 \${baseName}.qctrim.R1.fastq ${R1trimOptions} 2> \${baseName}.R1.trimrun.log 
-	    java  ${params.Java} -jar ${trimJar} SE -threads ${trimThreads} -phred33 $read2 \${baseName}.qctrim.R2.fastq ${R2trimOptions} 2> \${baseName}.R2.trimrun.log    
+	    java ${params.Java} -jar ${trimJar} SE -threads ${trimThreads} -phred33 \
+	    ${read1} \${baseName}.trimmed.fastq ${trimOptions} 2> \${baseName}.trimrun.log
+
+	    if [ -s \${baseName}.trimmed.fastq ]
+	    then
+	       fastq_to_fasta -v -i \${baseName}.trimmed.fastq -o \${baseName}_SearchReady.fasta
+	    fi
+
+	    module unload ${trimJava}
+	    module load ${nxfJava}
+
+	    """
+    } else {
+    	    """
+	    #!/bin/bash
+
+	    fileName=\$(basename "${read1}")
+	    baseName="\${fileName%_*_R1.fastq}"
+
+	    truncate -s 0 \${baseName}_SearchReady.fasta
+
+	    module unload ${nxfJava}
+	    module load ${trimJava}
+
+	    java  ${params.Java} -jar ${trimJar} SE -threads ${trimThreads} -phred33 $read1 \${baseName}.qctrim.R1.fastq ${R1trimOptions} 2> \${baseName}.R1.trimrun.log
+	    java  ${params.Java} -jar ${trimJar} SE -threads ${trimThreads} -phred33 $read2 \${baseName}.qctrim.R2.fastq ${R2trimOptions} 2> \${baseName}.R2.trimrun.log
 
 	    pear ${stitchOptions} -f \${baseName}.qctrim.R1.fastq -r \${baseName}.qctrim.R2.fastq -o \${baseName}.stitch
 
@@ -354,11 +354,11 @@ process runVsearch {
 
 
 	output:
-	file 'out' into summaryChannel    
+	file 'out' into summaryChannel
 	file "*"
 
 
-	"""   
+	"""
 	#!/bin/bash
 
 	fileName=\$(basename "${inputfile}")
@@ -374,7 +374,7 @@ process runVsearch {
 	then
 		params.maxhits=\${params.maxhitsV}
 	else
-		params.maxhits=\${params.maxhitsNOV}	
+		params.maxhits=\${params.maxhitsNOV}
 	fi
 
 	if [ -s "${inputfile}" ]
@@ -400,22 +400,22 @@ process runVsearch {
 		if [ -s \${baseName}_vsearch.tsv ]
 		then
 			echo \${baseName}_vsearch.tsv file has data. Run summary
-		
+
 			perl ${params.ScriptSummaryVsearch} \
 			\${baseName}_vsearch.tsv \
 			\${baseName}_vsearchSummary.txt \
-			${params.maxhits} ${params.percentile} 
+			${params.maxhits} ${params.percentile}
 		fi
 
 		if [ -s \${baseName}_vsearchSummary.txt ]
 		then
 			echo \${baseName}_vsearchSummary.txt file has data. Send to output channel
-			
+
 			cat \${baseName}_vsearchSummary.txt > out
-			
+
 			header="HEADER_${params.Amplicon}_seqLot${params.SeqLot}_vsearchSummaryReport.txt"
 			truncate -s 0  \${header}
-			
+
 			echo -e "PARAMETERS:" >> \${header}
 			echo -e "Amplicon=${params.Amplicon}  SequencingLot=${params.SeqLot} percIdent=${params.percidentity} maxhits=${params.maxhits} mincov=${params.mincov} percentile=${params.percentile}" >> \${header}
 			echo -e "\nCMDS:" >> \${header}
@@ -425,16 +425,16 @@ process runVsearch {
 			echo -e "Sample\tAmplicon\tEXTENDED_SEQID\tTOTAL_READS_IN_DEMULTIPLEXED_SAMPLE\tTOTAL_HITS\tMIN_percIdent\tMAX_percIdent\tAVG_percIdent\tMIN_alnLen\tMAX_alnLen\tAVG_alnLen\tMIN_Coverage\tMAX_Coverage\tAVG_Coverage\t${params.percentile}_PERCENTILE" >> \${header}
 		fi
 	fi
-   
+
     	"""
 
-} 
+}
 
 
-summaryChannel 
+summaryChannel
    .collectFile(name: file(params.out))
    .println { "Result saved to file: $it" }
-      
+
 
 workflow.onComplete {
     def subject = "[Task #${params.ticket}] B_Allan FLUIDIGM PIPELINE: Fluidigm read preparation and clustering for amplicon: ${params.Amplicon} batch: ${params.SeqLot}"
@@ -450,7 +450,6 @@ exit status  : ${workflow.exitStatus}
 Error report : ${workflow.errorReport ?: '-'}
 ---------------------------
     """
-    
+
     ['mail', '-s', subject, params.email].execute() << "${final_log}\n${run_info}"
 }
-
